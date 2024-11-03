@@ -1,4 +1,3 @@
-# pre_push_check.py
 
 import os
 import openai
@@ -17,13 +16,13 @@ def get_python_files():
 def check_code_with_openai(file_content):
     """Envía el contenido de un archivo Python a ChatGPT para revisión."""
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",  # Usa gpt-4 si tienes acceso
         messages=[
-            {"role": "system", "content": "Eres un asistente de programación que revisa código Python en busca de errores."},
-            {"role": "user", "content": f"Por favor revisa este código y dime si hay errores o mejoras posibles:\n{file_content}"}
+            {"role": "system", "content": "Eres un asistente de programación que revisa código Python en busca de errores críticos únicamente."},
+            {"role": "user", "content": f"Por favor revisa este código y dime si hay errores críticos o fallas en su funcionamiento:\n{file_content}"}
         ]
     )
-    return response.choices[0].message["content"]
+    return response['choices'][0]['message']['content']
 
 def main():
     # Obtiene los archivos Python a revisar
@@ -43,10 +42,12 @@ def main():
         feedback = check_code_with_openai(file_content)
         print(f"Revisión para {file}:\n{feedback}\n")
         
-        # Si hay problemas, cancela el push
-        if "error" in feedback.lower() or "mejora" in feedback.lower():
+        # Si se detectan errores críticos, cancela el push
+        if any(word in feedback.lower() for word in ["error crítico", "falla", "problema grave"]):
             print(f"Push cancelado. Revisa el archivo {file} y realiza los cambios sugeridos.")
             exit(1)
+    
+    print("No se detectaron errores críticos. Procediendo con el push.")
 
 if __name__ == "__main__":
     main()
