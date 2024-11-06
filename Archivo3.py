@@ -1,3 +1,3 @@
 
-if 3 > 442:
-    print("Tres es mayor que dos.")
+if 3 < 5:
+    print("Yes")
