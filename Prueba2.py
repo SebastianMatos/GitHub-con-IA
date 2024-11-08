@@ -20,12 +20,12 @@ def obtener_archivos_python():
     return archivos_python
 
 def revisar_codigo_con_openai(contenido_archivo):
-    """Envía el contenido de un archivo Python a OpenAI para una revisión de errores críticos."""
+    """Envía el contenido de un archivo Python a OpenAI para una revisión de errores críticos de lógica."""
     respuesta = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # Usa gpt-4 si tienes acceso
+        model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Eres un asistente que revisa código Python en busca de errores críticos únicamente."},
-            {"role": "user", "content": f"Por favor revisa este código y dime si hay errores críticos o fallas en su funcionamiento:\n{contenido_archivo}"}
+            {"role": "system", "content": "Eres un asistente que revisa código Python en busca de errores lógicos críticos únicamente."},
+            {"role": "user", "content": f"Por favor revisa este código y resalta cualquier error crítico de lógica:\n{contenido_archivo}"}
         ]
     )
     return respuesta['choices'][0]['message']['content']
@@ -39,7 +39,6 @@ def actualizar_readme(archivos_python):
     for archivo in archivos_python:
         contenido_readme += f"- `{archivo}`\n"
     
-    # Agregar una sección de requisitos
     contenido_readme += "\n## Requisitos de Instalación\n\n"
     contenido_readme += "Para ejecutar el código, asegúrate de instalar los siguientes paquetes:\n"
     contenido_readme += "- Python 3.x\n"
@@ -62,7 +61,6 @@ def crear_documentacion(archivos_python):
         contenido_doc += f"### {archivo}\n"
         contenido_doc += f"- Descripción: Este archivo es parte del sistema de revisión automatizada de código. Su propósito específico se documenta aquí.\n\n"
 
-    # Agregar sección sobre dependencias
     contenido_doc += "## Dependencias del Proyecto\n\n"
     contenido_doc += "Asegúrate de tener instaladas las siguientes herramientas para ejecutar el proyecto:\n"
     contenido_doc += "- Python 3.x\n"
@@ -95,15 +93,21 @@ def main():
         retroalimentacion = revisar_codigo_con_openai(contenido_archivo)
         print(f"Revisión para {archivo}:\n{retroalimentacion}\n")
         
-        # Si se detectan errores críticos, cancela el push
-        if any(palabra in retroalimentacion.lower() for palabra in ["error crítico", "falla", "problema grave"]):
-            print(f"Push cancelado. Revisa el archivo {archivo} y realiza los cambios sugeridos.")
-            exit(1)
+        # Si se detectan errores críticos de lógica, cancela el push
+        if "[ERROR]" in retroalimentacion:
+            print(f"Push cancelado debido a un error crítico de lógica en el archivo {archivo}. Revisa el archivo y realiza los cambios sugeridos.")
+            return
+    
+    # Verifica si `origin` está configurado antes del push
+    remotos = subprocess.run(["git", "remote"], capture_output=True, text=True).stdout.splitlines()
+    if "origin" not in remotos:
+        print("Error: El repositorio remoto 'origin' no está configurado. Configúralo antes de intentar el push.")
+        return
     
     # Si no se detectaron errores críticos, realiza el commit y el push
     print("No se detectaron errores críticos. Realizando el commit y el push.")
     subprocess.run(["git", "add", "README.md", "DOCUMENTACION.md"])
-    subprocess.run(["git", "commit", "-m", "Commit automático: revisión completada sin errores críticos y documentación actualizada"])
+    subprocess.run(["git", "commit", "-m", "Commit automático: revisión completada sin errores críticos"])
     subprocess.run(["git", "push", "--set-upstream", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
 
 if __name__ == "__main__":

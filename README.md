@@ -8,7 +8,8 @@ Este proyecto utiliza IA para revisar los archivos Python en busca de errores cr
 
 ## Requisitos de Instalación
 
-Para ejecutar el código, instala los siguientes paquetes:
+Para ejecutar el código, asegúrate de instalar los siguientes paquetes:
 - Python 3.x
 - openai (`pip install openai`)
 - git
+
