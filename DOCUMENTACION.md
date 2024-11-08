@@ -8,7 +8,7 @@ El objetivo de este proyecto es utilizar IA para revisar automáticamente los arc
 
 ## Archivos en el Proyecto
 
-### Archivo2.py
+### Archivo.py
 - Descripción: Este archivo es parte del sistema de revisión automatizada de código. Su propósito específico se documenta aquí.
 
 ## Dependencias del Proyecto
