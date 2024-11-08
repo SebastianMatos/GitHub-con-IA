@@ -1,1 +1,1 @@
-print("Cuatro es mayor que dos.")
+print("Cuatro es mayor que dos")
