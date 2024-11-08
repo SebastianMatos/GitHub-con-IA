@@ -1,2 +1,3 @@
-if 3<6:
+if 3<4:
+// FIXME: ERROR DETECTADO
     print("Yes")
