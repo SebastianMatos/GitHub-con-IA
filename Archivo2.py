@@ -1,3 +1,3 @@
 
-if 5 > 3:
-    print("Cinco es mayor que tres.")
+if 6 > 3:
+    print("Seis es mayor que tres.")
