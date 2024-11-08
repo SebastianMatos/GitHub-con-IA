@@ -4,8 +4,6 @@ Este proyecto utiliza IA para revisar los archivos Python en busca de errores cr
 
 ## Archivos en el Proyecto
 
-- `Archivo.py`
-- `Archivo2.py`
 - `Archivo3.py`
 
 ## Requisitos de Instalación
