@@ -1,1 +1,3 @@
-print("Cuatro7444 es mayor que dos..")
+
+if 3 < 5:
+    print("Yes")
