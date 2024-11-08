@@ -5,6 +5,31 @@ import subprocess
 # Configura tu clave API de OpenAI
 openai.api_key = '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'
 
+def extraer_palabras_clave(mensaje):
+    # Define palabras clave de ejemplo o reglas de extracción
+    palabras_clave = []
+    # Aquí puedes implementar lógica para extraer las palabras específicas de la retroalimentación
+    for linea in mensaje.splitlines():
+        if "[ERROR]" in linea:
+            palabras_clave.extend(linea.split())
+    return palabras_clave
+def resaltar_errores(archivo, palabras_clave):
+    with open(archivo, 'r') as f:
+        contenido = f.readlines()
+    
+    contenido_resaltado = []
+    for linea in contenido:
+        for palabra in palabras_clave:
+            if palabra in linea:
+                # Añade un comentario de error antes de la línea con el texto a resaltar
+                linea = f"// FIXME: ERROR DETECTADO\n{linea.replace(palabra, f'{palabra}')}"
+        contenido_resaltado.append(linea)
+    
+    with open(archivo, 'w') as f:
+        f.writelines(contenido_resaltado)
+    print(f"Errores resaltados en {archivo}")
+
+
 def obtener_archivos_python():
     """Obtiene una lista de archivos Python listos para commit, excluyendo Prueba1.py y Prueba2.py."""
     # Agrega todos los cambios al área de preparación
@@ -24,7 +49,7 @@ def revisar_codigo_con_openai(contenido_archivo):
     respuesta = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",  # Usa gpt-4 si tienes acceso
         messages=[
-            {"role": "system", "content": "Eres un asistente que revisa código Python en busca de errores críticos únicamente, dejame en claro que hay error, usando [ERROR] como la primera palabra en el codigo."},
+            {"role": "system", "content": "Eres un asistente que revisa código Python en busca de errores en codigo en python y vas a leer un archivo, al responderme dime [ERROR] si encontraste error que impida correr el codigo, no tomes en cuenta sugerencias y si consideras que al compilar el codigo, habra una respuesta y no habra errores pones [BIEN], NO OLVIDES DE PONER DONDE ESTA EL ERROR EN EL CODIGO SI ES QUE HAY ERROR"},
             {"role": "user", "content": f"Por favor revisa este código y dime si hay errores críticos o fallas en su funcionamiento:\n{contenido_archivo}"}
         ]
     )
@@ -105,12 +130,24 @@ def main():
         
         # Llama a la API de OpenAI para revisar el código
         retroalimentacion = revisar_codigo_con_openai(contenido_archivo)
-        print(f"Revisión para {archivo}:\n{retroalimentacion}\n")
         
+        # Filtra "[BIEN]" y "[ERROR]" de la retroalimentación antes de imprimir
+        retroalimentacion_filtrada = retroalimentacion.replace("[BIEN]", "").replace("[ERROR]", "")
+
+
+        print(f"Revisión para {archivo}:\n{retroalimentacion_filtrada}\n")
+
+
+        
+        retroalimentacion = revisar_codigo_con_openai(contenido_archivo)
+        palabras_clave = extraer_palabras_clave(retroalimentacion)
         # Si se detectan errores críticos, cancela el push
-        if any(palabra in retroalimentacion.lower() for palabra in ["error crítico", "falla","[error]", "problema grave"]):
-            print(f"Push cancelado. Revisa el archivo {archivo} y realiza los cambios sugeridos.")
+        if any(palabra in retroalimentacion.lower() for palabra in ["[error]"]):
+            resaltar_errores(archivo, palabras_clave)
+            print(f"Push cancelado. Revisa el archivo {archivo} con errores resaltados.")
             exit(1)
+        # En el bucle que revisa cada archivo en la función main
+
     
     # Si no se detectaron errores críticos, realiza el commit y el push
     print("No se detectaron errores críticos. Realizando el commit y el push.")
