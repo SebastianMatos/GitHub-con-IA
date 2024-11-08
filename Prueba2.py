@@ -73,7 +73,19 @@ def crear_documentacion(archivos_python):
         f.write(contenido_doc)
     print("DOCUMENTACION.md creado y actualizado.")
 
+def sincronizar_repositorio():
+    """Sincroniza el repositorio local con el remoto antes de hacer un push."""
+    # Realiza un pull para traer cambios remotos
+    resultado_pull = subprocess.run(["git", "pull", "origin", "main"], capture_output=True, text=True)
+    if "Already up to date" in resultado_pull.stdout:
+        print("El repositorio local ya está actualizado.")
+    else:
+        print("Repositorio actualizado con cambios remotos.")
+
 def main():
+    # Sincroniza el repositorio antes de realizar cambios
+    sincronizar_repositorio()
+    
     # Obtiene los archivos Python a revisar
     archivos_python = obtener_archivos_python()
     
@@ -104,7 +116,11 @@ def main():
     print("No se detectaron errores críticos. Realizando el commit y el push.")
     subprocess.run(["git", "add", "README.md", "DOCUMENTACION.md"])
     subprocess.run(["git", "commit", "-m", "Commit automático: revisión completada sin errores críticos y documentación actualizada"])
+    subprocess.run(["git", "pull", "--rebase"])
+
     subprocess.run(["git", "push", "--set-upstream", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
+    subprocess.run(["git", "push", "--set-upstream", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
+
 
 if __name__ == "__main__":
     main()
