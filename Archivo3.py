@@ -1,6 +1,1 @@
-<<<<<<< HEAD
-print("Cuatros es mayor que dos..")
-=======
-
-
->>>>>>> fabefddcb759ae9ab15996566fa025190a595ad9
+print("Cuatro7444 es mayor que dos..")

@@ -24,7 +24,7 @@ def revisar_codigo_con_openai(contenido_archivo):
     respuesta = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",  # Usa gpt-4 si tienes acceso
         messages=[
-            {"role": "system", "content": "Eres un asistente que revisa código Python en busca de errores críticos únicamente."},
+            {"role": "system", "content": "Eres un asistente que revisa código Python en busca de errores críticos únicamente, dejame en claro que hay error, usando [ERROR] como la primera palabra en el codigo."},
             {"role": "user", "content": f"Por favor revisa este código y dime si hay errores críticos o fallas en su funcionamiento:\n{contenido_archivo}"}
         ]
     )
@@ -83,7 +83,7 @@ def sincronizar_repositorio():
         print("Repositorio actualizado con cambios remotos.")
 
 def main():
-    # Sincroniza el repositorio antes de realizar cambios
+    # Sincroniza el repositorio antes de realizar cambio
     sincronizar_repositorio()
     
     # Obtiene los archivos Python a revisar
@@ -108,7 +108,7 @@ def main():
         print(f"Revisión para {archivo}:\n{retroalimentacion}\n")
         
         # Si se detectan errores críticos, cancela el push
-        if any(palabra in retroalimentacion.lower() for palabra in ["error crítico", "falla", "problema grave"]):
+        if any(palabra in retroalimentacion.lower() for palabra in ["error crítico", "falla","[error]", "problema grave"]):
             print(f"Push cancelado. Revisa el archivo {archivo} y realiza los cambios sugeridos.")
             exit(1)
     
@@ -116,9 +116,6 @@ def main():
     print("No se detectaron errores críticos. Realizando el commit y el push.")
     subprocess.run(["git", "add", "README.md", "DOCUMENTACION.md"])
     subprocess.run(["git", "commit", "-m", "Commit automático: revisión completada sin errores críticos y documentación actualizada"])
-    subprocess.run(["git", "pull", "--rebase"])
-
-    subprocess.run(["git", "push", "--set-upstream", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
     subprocess.run(["git", "push", "--set-upstream", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
 
 

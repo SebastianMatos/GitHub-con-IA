@@ -6,7 +6,7 @@
             "type": "shell",
             "command": "python",
             "args": [
-                "C:/Users/Sebastian/OneDrive - UNIVERSIDAD NACIONAL DE INGENIERIA/Desktop/GitHub con IA/Prueba1.py"
+                "C:/Users/Sebastian/OneDrive - UNIVERSIDAD NACIONAL DE INGENIERIA/Desktop/GitHub con IA/Prueba2.py"
             ],
             "group": {
                 "kind": "build",
