@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-print("Cuatro es mayor que dos..")
+print("Cuatros es mayor que dos..")
 =======
 
 
