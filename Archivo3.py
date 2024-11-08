@@ -1,2 +1,2 @@
-if 3<5:
+if 3<6:
     print("Yes")
