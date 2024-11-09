@@ -107,8 +107,28 @@ def crear_documentacion(archivos_proyecto):
         f.write(contenido_doc)
     print("DOCUMENTACION.md creado y actualizado.")
 
+
+import subprocess
+
+def configurar_remoto():
+    """Configura el remoto 'origin' si no existe."""
+    # Verifica si 'origin' está configurado como remoto
+    resultado_remoto = subprocess.run(["git", "remote"], capture_output=True, text=True)
+    
+    if "origin" not in resultado_remoto.stdout:
+        print("El remoto 'origin' no está configurado. Añadiéndolo ahora.")
+        # Añade el remoto 'origin' con la URL de tu repositorio
+        subprocess.run(["git", "remote", "add", "origin", "https://github.com/SebastianMatos/GitHub-con-IA.git"])
+    else:
+        print("El remoto 'origin' ya está configurado.")
+
 def sincronizar_repositorio():
-    """Sincroniza el repositorio local con el remoto antes de hacer un push usando rebase."""
+    """Sincroniza el repositorio local con el remoto antes de hacer un push."""
+    configurar_remoto()  # Configura el remoto antes de sincronizar
+    # Realiza un fetch para actualizar la información del remoto
+    subprocess.run(["git", "fetch", "origin"], check=True)
+    
+    # Realiza un pull con rebase para evitar conflictos de historial
     resultado_pull = subprocess.run(["git", "pull", "--rebase", "origin", "main"], capture_output=True, text=True)
     
     if "CONFLICT" in resultado_pull.stdout:
@@ -118,7 +138,6 @@ def sincronizar_repositorio():
         print("El repositorio local ya está actualizado.")
     else:
         print("Repositorio actualizado con cambios remotos usando rebase.")
-
 
 def main():
     # Sincroniza el repositorio antes de realizar cambios
@@ -153,11 +172,11 @@ def main():
             print(f"Push cancelado. Revisa el archivo {archivo} con errores resaltados.")
             exit(1)
 
-    # Realiza el push con la opción --force-with-lease para evitar el error de rechazo
+    # Realiza el push con --force si es necesario para evitar rechazos
     print("No se detectaron errores críticos. Realizando el commit y el push.")
     subprocess.run(["git", "add", "README.md", "DOCUMENTACION.md"])
     subprocess.run(["git", "commit", "-m", "Commit automático: revisión completada sin errores críticos y documentación actualizada"])
-    subprocess.run(["git", "push", "--force-with-lease", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
+    subprocess.run(["git", "push", "--force", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
 
 if __name__ == "__main__":
     main()
