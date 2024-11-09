@@ -47,13 +47,13 @@ def revisar_codigo_con_openai(contenido_archivo, extension):
     """Envía el contenido de un archivo a OpenAI para una revisión de errores críticos según el tipo de archivo."""
     # Determina el tipo de archivo y ajusta el mensaje en función de la extensión
     if extension == ".py":
-        descripcion = "Eres un asistente que revisa código Python en busca de errores críticos únicamente."
+        descripcion = "Eres un asistente que revisa código Python en busca de errores en codigo en python y vas a leer un archivo, al responderme dime [ERROR] si encontraste error que impida correr el codigo, no tomes en cuenta sugerencias y si consideras que al compilar el codigo, habra una respuesta y no habra errores pones [BIEN], NO OLVIDES DE PONER DONDE ESTA EL ERROR EN EL CODIGO SI ES QUE HAY ERROR"
     elif extension == ".html":
-        descripcion = "Eres un asistente que revisa código HTML en busca de errores críticos y posibles problemas de estructura."
+        descripcion = "Eres un asistente que revisa código HTML en busca de errores en codigo en python y vas a leer un archivo, al responderme dime [ERROR] si encontraste error que impida correr el codigo, no tomes en cuenta sugerencias y si consideras que al compilar el codigo, habra una respuesta y no habra errores pones [BIEN], NO OLVIDES DE PONER DONDE ESTA EL ERROR EN EL CODIGO SI ES QUE HAY ERROR"
     elif extension == ".js":
-        descripcion = "Eres un asistente que revisa código JavaScript en busca de errores críticos y problemas comunes de funcionamiento."
+        descripcion = "Eres un asistente que revisa código JavaScript en busca de errores en codigo en python y vas a leer un archivo, al responderme dime [ERROR] si encontraste error que impida correr el codigo, no tomes en cuenta sugerencias y si consideras que al compilar el codigo, habra una respuesta y no habra errores pones [BIEN], NO OLVIDES DE PONER DONDE ESTA EL ERROR EN EL CODIGO SI ES QUE HAY ERROR"
     else:
-        descripcion = "Eres un asistente que revisa código en busca de errores críticos, aunque no reconozco explícitamente la extensión."
+        descripcion = "Eres un asistente que revisa código en busca de errores en codigo en python y vas a leer un archivo, al responderme dime [ERROR] si encontraste error que impida correr el codigo, no tomes en cuenta sugerencias y si consideras que al compilar el codigo, habra una respuesta y no habra errores pones [BIEN], NO OLVIDES DE PONER DONDE ESTA EL ERROR EN EL CODIGO SI ES QUE HAY ERROR, aunque no reconozco explícitamente la extensión."
 
     respuesta = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",  # Usa gpt-4 si tienes acceso
