@@ -111,14 +111,13 @@ def sincronizar_repositorio():
     """Sincroniza el repositorio local con el remoto antes de hacer un push usando rebase."""
     resultado_pull = subprocess.run(["git", "pull", "--rebase", "origin", "main"], capture_output=True, text=True)
     
-    if "Already up to date" in resultado_pull.stdout:
-        print("El repositorio local ya está actualizado.")
-    elif "CONFLICT" in resultado_pull.stdout:
+    if "CONFLICT" in resultado_pull.stdout:
         print("Conflicto detectado durante el pull --rebase. Por favor, resuelve el conflicto manualmente antes de continuar.")
         exit(1)
+    elif "Already up to date" in resultado_pull.stdout:
+        print("El repositorio local ya está actualizado.")
     else:
         print("Repositorio actualizado con cambios remotos usando rebase.")
-
 
 
 def main():
@@ -142,26 +141,23 @@ def main():
         with open(archivo, 'r') as f:
             contenido_archivo = f.read()
         
-        # Llama a la API de OpenAI para revisar el código según el tipo de archivo
         retroalimentacion = revisar_codigo_con_openai(contenido_archivo, extension)
         
-        # Filtra "[BIEN]" y "[ERROR]" de la retroalimentación antes de imprimir
         retroalimentacion_filtrada = retroalimentacion.replace("[BIEN]", "").replace("[ERROR]", "")
         print(f"Revisión para {archivo}:\n{retroalimentacion_filtrada}\n")
         
         palabras_clave = extraer_palabras_clave(retroalimentacion)
         
-        # Si se detectan errores críticos, cancela el push
         if "[ERROR]" in retroalimentacion:
             resaltar_errores(archivo, palabras_clave)
             print(f"Push cancelado. Revisa el archivo {archivo} con errores resaltados.")
             exit(1)
 
-    # Si no se detectaron errores críticos, realiza el commit y el push
+    # Realiza el push con la opción --force-with-lease para evitar el error de rechazo
     print("No se detectaron errores críticos. Realizando el commit y el push.")
     subprocess.run(["git", "add", "README.md", "DOCUMENTACION.md"])
     subprocess.run(["git", "commit", "-m", "Commit automático: revisión completada sin errores críticos y documentación actualizada"])
-    subprocess.run(["git", "push", "--set-upstream", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
+    subprocess.run(["git", "push", "--force-with-lease", "https://github.com/SebastianMatos/GitHub-con-IA.git", "main"])
 
 if __name__ == "__main__":
     main()
