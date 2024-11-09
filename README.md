@@ -1,10 +1,13 @@
 # Proyecto de Revisión de Código con IA
 
-Este proyecto utiliza IA para revisar los archivos Python en busca de errores críticos antes de hacer un push.
+Este proyecto utiliza IA para revisar los archivos en busca de errores críticos antes de hacer un push.
 
 ## Archivos en el Proyecto
 
-- `Archivo3.py`
+- `DOCUMENTACION.md`
+- `README.md`
+- `hello.html`
+- `test.js`
 
 ## Requisitos de Instalación
 
