@@ -108,16 +108,17 @@ def crear_documentacion(archivos_proyecto):
     print("DOCUMENTACION.md creado y actualizado.")
 
 def sincronizar_repositorio():
-    """Sincroniza el repositorio local con el remoto antes de hacer un push."""
-    resultado_pull = subprocess.run(["git", "pull", "origin", "main"], capture_output=True, text=True)
+    """Sincroniza el repositorio local con el remoto antes de hacer un push usando rebase."""
+    resultado_pull = subprocess.run(["git", "pull", "--rebase", "origin", "main"], capture_output=True, text=True)
     
     if "Already up to date" in resultado_pull.stdout:
         print("El repositorio local ya está actualizado.")
     elif "CONFLICT" in resultado_pull.stdout:
-        print("Conflicto detectado durante el pull. Por favor, resuelve el conflicto manualmente antes de continuar.")
+        print("Conflicto detectado durante el pull --rebase. Por favor, resuelve el conflicto manualmente antes de continuar.")
         exit(1)
     else:
-        print("Repositorio actualizado con cambios remotos.")
+        print("Repositorio actualizado con cambios remotos usando rebase.")
+
 
 
 def main():
