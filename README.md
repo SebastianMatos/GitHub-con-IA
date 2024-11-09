@@ -4,10 +4,7 @@ Este proyecto utiliza IA para revisar los archivos en busca de errores críticos 
 
 ## Archivos en el Proyecto
 
-- `DOCUMENTACION.md`
-- `README.md`
-- `hello.html`
-- `test.js`
+- `Prueba3.py`
 
 ## Requisitos de Instalación
 
