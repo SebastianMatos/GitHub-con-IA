@@ -3,7 +3,7 @@ import openai
 import subprocess
 
 # Configura tu clave API de OpenAI
-openai.api_key = '--'
+openai.api_key = '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'
 
 def extraer_palabras_clave(mensaje):
     # Define palabras clave de ejemplo o reglas de extracción
