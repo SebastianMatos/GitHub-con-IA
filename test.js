@@ -1,3 +1,3 @@
 print("Hello wolrd")
 
-addEventListener('click')
+addEventListenñlkjer('click')

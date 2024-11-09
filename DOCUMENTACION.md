@@ -8,7 +8,7 @@ El objetivo de este proyecto es utilizar IA para revisar automáticamente los arc
 
 ## Archivos en el Proyecto
 
-### Prueba3.py
+### test.js
 - Descripción: Este archivo es parte del sistema de revisión automatizada de código.
 
 ## Dependencias del Proyecto
