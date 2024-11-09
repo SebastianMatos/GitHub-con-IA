@@ -4,7 +4,7 @@ Este proyecto utiliza IA para revisar los archivos en busca de errores críticos 
 
 ## Archivos en el Proyecto
 
-- `Prueba3.py`
+- `test.js`
 
 ## Requisitos de Instalación
 

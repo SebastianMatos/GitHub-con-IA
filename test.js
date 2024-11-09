@@ -1,3 +1,1 @@
-print("Hello wolrd")
-
-addEventListenñlkjer('click')
+console.log("Hello world")
